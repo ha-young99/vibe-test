@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>로또 번호 생성기</title>
+    <!-- Bootstrap CDN -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
+    <link href="css/style.css" rel="stylesheet">
+</head>
+<body>
+    <div class="container py-5">
+        <div class="row justify-content-center">
+            <div class="col-12 col-lg-10">
+                <h1 class="text-center fw-bold mb-4">
+                    <i class="bi bi-stars"></i> 로또 번호 생성기
+                </h1>
+
+                <!-- 번호 선택 영역 (좌: 고정 / 우: 제외) -->
+                <div class="row g-3 mb-3">
+                    <div class="col-12 col-md-6">
+                        <div class="card lotto-card h-100">
+                            <div class="card-body">
+                                <div class="d-flex justify-content-between align-items-center mb-3">
+                                    <h2 class="h5 fw-bold mb-0">
+                                        <i class="bi bi-check-circle text-primary"></i> 고정할 번호
+                                    </h2>
+                                    <span class="badge text-bg-primary fs-6"><span id="fixedCount">0</span>/6</span>
+                                </div>
+                                <div id="fixedBoard" class="number-board"></div>
+                                <p id="fixedMessage" class="board-message text-danger small mb-0 mt-2"></p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-12 col-md-6">
+                        <div class="card lotto-card h-100">
+                            <div class="card-body">
+                                <div class="d-flex justify-content-between align-items-center mb-3">
+                                    <h2 class="h5 fw-bold mb-0">
+                                        <i class="bi bi-x-circle text-danger"></i> 제외할 번호
+                                    </h2>
+                                    <span class="badge text-bg-danger fs-6"><span id="excludedCount">0</span>개</span>
+                                </div>
+                                <div id="excludedBoard" class="number-board"></div>
+                                <p id="excludedMessage" class="board-message text-danger small mb-0 mt-2"></p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 버튼 영역 -->
+                <div class="d-flex gap-2 mb-3">
+                    <button type="button" id="generateBtn" class="btn btn-primary btn-lg flex-grow-1">
+                        <i class="bi bi-shuffle"></i> 번호 생성 (5세트)
+                    </button>
+                    <button type="button" id="resetBtn" class="btn btn-outline-secondary btn-lg text-nowrap">
+                        전체 초기화
+                    </button>
+                </div>
+
+                <!-- 생성 결과 영역 -->
+                <div class="card lotto-card">
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between align-items-center mb-3">
+                            <h2 class="h5 fw-bold mb-0">생성 결과</h2>
+                            <button type="button" id="clearResultBtn" class="btn btn-outline-secondary btn-sm">
+                                <i class="bi bi-trash"></i> 결과 지우기
+                            </button>
+                        </div>
+                        <div id="result"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="js/app.js"></script>
+</body>
+</html>

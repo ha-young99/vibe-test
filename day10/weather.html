@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>오늘의 날씨</title>
+    <!-- Bootstrap CDN -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
+    <style>
+        body {
+            min-height: 100vh;
+            background: linear-gradient(135deg, #e0f2fe 0%, #f0f9ff 50%, #fef9c3 100%);
+            font-family: "Pretendard", "Noto Sans KR", sans-serif;
+        }
+
+        .search-box {
+            background: #ffffff;
+            border-radius: 24px;
+            box-shadow: 0 8px 24px rgba(14, 165, 233, 0.12);
+        }
+
+        .search-box .form-select,
+        .search-box .btn {
+            border-radius: 50px;
+            padding: 0.6rem 1.4rem;
+        }
+
+        .search-box .btn {
+            background: #38bdf8;
+            border: none;
+            color: #fff;
+        }
+
+        .search-box .btn:hover {
+            background: #0ea5e9;
+        }
+
+        .weather-card {
+            background: #ffffff;
+            border: none;
+            border-radius: 28px;
+            box-shadow: 0 12px 32px rgba(14, 165, 233, 0.15);
+        }
+
+        .main-weather img {
+            width: 120px;
+            height: 120px;
+        }
+
+        .main-weather .temp {
+            font-size: 3.5rem;
+            font-weight: 700;
+            color: #0369a1;
+        }
+
+        .stat-tile {
+            background: #f0f9ff;
+            border-radius: 20px;
+            padding: 1.2rem;
+            height: 100%;
+        }
+
+        .stat-tile i {
+            font-size: 2rem;
+            color: #38bdf8;
+            display: inline-block;
+        }
+
+        .stat-tile .label {
+            font-size: 0.85rem;
+            color: #64748b;
+        }
+
+        .stat-tile .value {
+            font-size: 1.4rem;
+            font-weight: 600;
+            color: #0f172a;
+        }
+    </style>
+</head>
+<body>
+    <div class="container py-5">
+        <div class="row justify-content-center">
+            <div class="col-12 col-md-10 col-lg-8">
+                <h1 class="text-center fw-bold mb-4" style="color:#0369a1;">
+                    <i class="bi bi-cloud-sun"></i> 오늘의 날씨
+                </h1>
+
+                <!-- 도시 선택 영역 -->
+                <div class="search-box p-4 mb-4">
+                    <div class="d-flex flex-column flex-sm-row gap-2">
+                        <select id="citySelect" class="form-select">
+                            <optgroup label="국내">
+                                <option value="Seoul,KR">서울</option>
+                                <option value="Busan,KR">부산</option>
+                                <option value="Incheon,KR">인천</option>
+                                <option value="Daegu,KR">대구</option>
+                                <option value="Daejeon,KR">대전</option>
+                                <option value="Gwangju,KR">광주</option>
+                                <option value="Ulsan,KR">울산</option>
+                                <option value="Suwon,KR">수원</option>
+                                <option value="Jeju City,KR">제주</option>
+                            </optgroup>
+                            <optgroup label="해외">
+                                <option value="Tokyo,JP">도쿄</option>
+                                <option value="Osaka,JP">오사카</option>
+                                <option value="Beijing,CN">베이징</option>
+                                <option value="Shanghai,CN">상하이</option>
+                                <option value="Hong Kong,HK">홍콩</option>
+                                <option value="Singapore,SG">싱가포르</option>
+                                <option value="Bangkok,TH">방콕</option>
+                                <option value="Sydney,AU">시드니</option>
+                                <option value="London,GB">런던</option>
+                                <option value="Paris,FR">파리</option>
+                                <option value="Berlin,DE">베를린</option>
+                                <option value="Rome,IT">로마</option>
+                                <option value="New York,US">뉴욕</option>
+                                <option value="Los Angeles,US">로스앤젤레스</option>
+                                <option value="Toronto,CA">토론토</option>
+                            </optgroup>
+                        </select>
+                        <button id="searchBtn" class="btn text-nowrap">
+                            <i class="bi bi-search"></i> 날씨 검색
+                        </button>
+                    </div>
+                </div>
+
+                <!-- 날씨 카드 영역 -->
+                <div id="weatherResult"></div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // ▼ OpenWeather API 키를 입력하세요
+        const API_KEY = "ae29971f24b9c4508d73b9e6a49193c1";
+
+        const citySelect = document.getElementById("citySelect");
+        const searchBtn = document.getElementById("searchBtn");
+        const weatherResult = document.getElementById("weatherResult");
+
+        // 풍향(각도) → 방위 변환
+        function getWindDirection(deg) {
+            const dirs = ["북", "북동", "동", "남동", "남", "남서", "서", "북서"];
+            return dirs[Math.round(deg / 45) % 8];
+        }
+
+        async function getWeather() {
+            const city = citySelect.value;
+            const cityName = citySelect.options[citySelect.selectedIndex].text;
+            const url = `https://api.openweathermap.org/data/2.5/weather?q=${encodeURIComponent(city)}&appid=${API_KEY}&units=metric&lang=kr`;
+
+            try {
+                const response = await fetch(url);
+                const data = await response.json();
+
+                if (!response.ok) {
+                    throw new Error(data.message);
+                }
+
+                renderWeather(cityName, data);
+            } catch (error) {
+                weatherResult.innerHTML = `
+                    <div class="alert alert-danger rounded-4 text-center">
+                        날씨 정보를 불러오지 못했습니다. (${error.message})
+                    </div>`;
+            }
+        }
+
+        function renderWeather(cityName, data) {
+            const icon = data.weather[0].icon;
+            const desc = data.weather[0].description;
+            const deg = data.wind.deg;
+
+            weatherResult.innerHTML = `
+                <div class="card weather-card p-4">
+                    <div class="main-weather text-center mb-4">
+                        <h2 class="fw-bold mb-0">${cityName}</h2>
+                        <img src="https://openweathermap.org/img/wn/${icon}@2x.png" alt="${desc}">
+                        <div class="temp">${Math.round(data.main.temp)}°C</div>
+                        <div class="text-secondary fs-5">${desc}</div>
+                    </div>
+
+                    <div class="row g-3 text-center">
+                        <div class="col-6 col-md-4">
+                            <div class="stat-tile">
+                                <i class="bi bi-droplet-half"></i>
+                                <div class="label">습도</div>
+                                <div class="value">${data.main.humidity}%</div>
+                            </div>
+                        </div>
+                        <div class="col-6 col-md-4">
+                            <div class="stat-tile">
+                                <i class="bi bi-arrow-up-circle" style="transform: rotate(${deg + 180}deg);"></i>
+                                <div class="label">풍향</div>
+                                <div class="value">${getWindDirection(deg)} (${deg}°)</div>
+                            </div>
+                        </div>
+                        <div class="col-6 col-md-4">
+                            <div class="stat-tile">
+                                <i class="bi bi-wind"></i>
+                                <div class="label">풍속</div>
+                                <div class="value">${data.wind.speed} m/s</div>
+                            </div>
+                        </div>
+                        <div class="col-6 col-md-6">
+                            <div class="stat-tile">
+                                <i class="bi bi-thermometer-sun"></i>
+                                <div class="label">최고 온도</div>
+                                <div class="value">${Math.round(data.main.temp_max)}°C</div>
+                            </div>
+                        </div>
+                        <div class="col-12 col-md-6">
+                            <div class="stat-tile">
+                                <i class="bi bi-thermometer-snow"></i>
+                                <div class="label">최저 온도</div>
+                                <div class="value">${Math.round(data.main.temp_min)}°C</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>`;
+        }
+
+        searchBtn.addEventListener("click", getWeather);
+    </script>
+</body>
+</html>

@@ -1,0 +1,276 @@
+:root {
+    --brand: #185FA5;
+    --brand-light: #378ADD;
+    --wind: #1D9E75;
+
+    --sunny-bg: #FAEEDA;
+    --sunny-icon: #BA7517;
+    --sunny-accent: #EF9F27;
+
+    --cloudy-bg: #F1EFE8;
+    --cloudy-icon: #5F5E5A;
+    --cloudy-accent: #888780;
+
+    --rainy-bg: #E6F1FB;
+    --rainy-icon: #185FA5;
+    --rainy-accent: #378ADD;
+
+    --storm-bg: #EEEDFE;
+    --storm-icon: #534AB7;
+    --storm-accent: #7F77DD;
+
+    --temp-low: #378ADD;
+    --temp-high: #D85A30;
+}
+
+body {
+    background: #f6f7f9;
+}
+
+/* 네비바 */
+.app-navbar {
+    background: #fff;
+}
+
+.app-logo {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    background: var(--brand);
+    color: #fff;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1rem;
+}
+
+.search-input {
+    max-width: 260px;
+    min-width: 0;
+}
+
+.refresh-btn {
+    color: var(--brand-light);
+    font-size: 1.25rem;
+    line-height: 1;
+}
+
+.refresh-btn:hover {
+    color: var(--brand);
+}
+
+/* 탭 */
+.nav-pills .nav-link {
+    color: #5f5e5a;
+    border: 1px solid #d3d1c7;
+    padding: 0.3rem 0.9rem;
+    font-size: 0.9rem;
+}
+
+.nav-pills .nav-link.active {
+    background: var(--brand);
+    border-color: var(--brand);
+    color: #E6F1FB;
+}
+
+/* 날씨 그룹 색상 */
+.weather-sunny {
+    --w-bg: var(--sunny-bg);
+    --w-icon: var(--sunny-icon);
+    --w-accent: var(--sunny-accent);
+}
+
+.weather-cloudy {
+    --w-bg: var(--cloudy-bg);
+    --w-icon: var(--cloudy-icon);
+    --w-accent: var(--cloudy-accent);
+}
+
+.weather-rainy {
+    --w-bg: var(--rainy-bg);
+    --w-icon: var(--rainy-icon);
+    --w-accent: var(--rainy-accent);
+}
+
+.weather-storm {
+    --w-bg: var(--storm-bg);
+    --w-icon: var(--storm-icon);
+    --w-accent: var(--storm-accent);
+}
+
+.weather-chip {
+    width: 34px;
+    height: 34px;
+    border-radius: 50%;
+    background: var(--w-bg);
+    color: var(--w-icon);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.1rem;
+    flex-shrink: 0;
+}
+
+/* 도시 카드 */
+.city-card {
+    background: #fff;
+    border: 1px solid #e3e2dc;
+    border-radius: 12px;
+    padding: 0.85rem;
+    height: 100%;
+    cursor: pointer;
+    transition: border-color 0.15s;
+}
+
+.city-card:hover,
+.city-card:focus-visible {
+    border-color: var(--brand-light);
+    outline: none;
+}
+
+.city-name {
+    font-weight: 600;
+}
+
+.city-temp {
+    font-size: 1.9rem;
+    font-weight: 600;
+    line-height: 1.2;
+    margin: 0.25rem 0;
+    color: var(--w-accent);
+}
+
+.city-meta {
+    font-size: 0.85rem;
+    color: #5f5e5a;
+    display: flex;
+    align-items: center;
+    gap: 0.35rem;
+}
+
+.icon-wind {
+    color: var(--wind);
+}
+
+.icon-humidity {
+    color: var(--brand-light);
+}
+
+.rain-badge {
+    display: inline-block;
+    background: #E6F1FB;
+    color: #0C447C;
+    font-size: 0.75rem;
+    padding: 0.15rem 0.5rem;
+    border-radius: 8px;
+    white-space: nowrap;
+}
+
+.city-card .rain-badge {
+    margin-top: 0.5rem;
+}
+
+/* 모달 요약 4칸 */
+.summary-cell {
+    border-radius: 8px;
+    padding: 0.5rem 0.65rem;
+}
+
+.summary-label {
+    font-size: 0.75rem;
+}
+
+.summary-value {
+    font-size: 1.15rem;
+    font-weight: 600;
+}
+
+.summary-temp {
+    background: #FAECE7;
+}
+
+.summary-temp .summary-label {
+    color: #993C1D;
+}
+
+.summary-temp .summary-value {
+    color: #712B13;
+}
+
+.summary-wind {
+    background: #E1F5EE;
+}
+
+.summary-wind .summary-label {
+    color: #0F6E56;
+}
+
+.summary-wind .summary-value {
+    color: #085041;
+}
+
+.summary-dir {
+    background: #EEEDFE;
+}
+
+.summary-dir .summary-label {
+    color: #534AB7;
+}
+
+.summary-dir .summary-value {
+    color: #3C3489;
+}
+
+.summary-humidity {
+    background: #E6F1FB;
+}
+
+.summary-humidity .summary-label {
+    color: #185FA5;
+}
+
+.summary-humidity .summary-value {
+    color: #0C447C;
+}
+
+/* 7일 예보 표 */
+.forecast-table {
+    font-size: 0.85rem;
+}
+
+.forecast-table th {
+    font-weight: 400;
+    font-size: 0.75rem;
+    color: #888780;
+    white-space: nowrap;
+}
+
+.forecast-table td {
+    white-space: nowrap;
+}
+
+.forecast-icon {
+    color: var(--w-accent);
+    font-size: 1.1rem;
+    margin-right: 0.3rem;
+    vertical-align: -2px;
+}
+
+.temp-low {
+    color: var(--temp-low);
+}
+
+.temp-high {
+    color: var(--temp-high);
+}
+
+@media (max-width: 575.98px) {
+    .forecast-table {
+        font-size: 0.75rem;
+    }
+
+    .forecast-table .weather-label,
+    .forecast-table .wind-dir {
+        display: none;
+    }
+}
